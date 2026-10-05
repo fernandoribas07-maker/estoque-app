@@ -1,0 +1,26 @@
+CREATE TABLE IF NOT EXISTS categorias (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nome VARCHAR(50) NOT NULL UNIQUE,
+    cor_hex VARCHAR(7) DEFAULT '#808080'
+);
+
+CREATE TABLE IF NOT EXISTS produtos (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    categoria_id INT REFERENCES categorias(id) ON DELETE SET NULL,
+    nome VARCHAR(100) NOT NULL,
+    quantidade_atual INT NOT NULL DEFAULT 0,
+    quantidade_minima INT NOT NULL DEFAULT 1,
+    unidade_medida VARCHAR(20) DEFAULT 'un',
+    data_validade DATE,
+    criado_em DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS lista_compras (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    produto_id INT REFERENCES produtos(id) ON DELETE CASCADE,
+    nome_item VARCHAR(100) NOT NULL,
+    quantidade_comprar INT NOT NULL DEFAULT 1,
+    comprado BOOLEAN DEFAULT 0,
+    origem VARCHAR(20) DEFAULT 'MANUAL',
+    criado_em DATETIME DEFAULT CURRENT_TIMESTAMP
+);

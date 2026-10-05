@@ -1,0 +1,10 @@
+# Dependências baixadas pelo npm
+node_modules/
+
+# Banco de dados local SQLite (gerado na sua máquina)
+*.db
+*.db-journal
+
+# Logs e arquivos do sistema operacional
+.DS_Store
+npm-debug.log*
