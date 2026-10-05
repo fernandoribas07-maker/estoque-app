@@ -39,3 +39,26 @@ O servidor estará acessível em: http://localhost:3000/produtos📝 [Para anota
   Conforme criarmos novas rotas (PUT /consumir, POST /produtos,
   DELETE), vamos adicionando as especificações a este manual!
 ======================================================
+### 5. 🔌 Especificação da API REST (Endpoints Implementados)
+
+#### **1. Listar Todos os Produtos**
+* **Rota:** `GET /produtos`
+* **Descrição:** Retorna todos os produtos cadastrados com os dados da categoria associada via `LEFT JOIN`.
+
+#### **2. Listar Produtos com Estoque Baixo**
+* **Rota:** `GET /produtos/estoque-baixo`
+* **Descrição:** Retorna apenas os produtos cuja `quantidade_atual` é menor ou igual à `quantidade_minima`.
+
+#### **3. Cadastrar Novo Produto**
+* **Rota:** `POST /produtos`
+* **Descrição:** Insere um novo produto no banco de dados SQLite.
+* **Corpo da Requisição (JSON):**
+```json
+{
+  "categoria_id": 2,
+  "nome": "Feijão Carioca 1kg",
+  "quantidade_atual": 3,
+  "quantidade_minima": 2,
+  "unidade_medida": "pacote",
+  "data_validade": "2027-03-30"
+}

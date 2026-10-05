@@ -3,3 +3,19 @@ GET http://localhost:3000/produtos
 
 ### Testar a baixa de 1 unidade do Leite (ID 1)
 PUT http://localhost:3000/produtos/1/consumir
+
+### Testar busca de produtos com estoque baixo
+GET http://localhost:3000/produtos/estoque-baixo
+
+### Cadastrar um novo produto
+POST http://localhost:3000/produtos
+Content-Type: application/json
+
+{
+  "categoria_id": 2,
+  "nome": "Feijão Carioca 1kg",
+  "quantidade_atual": 3,
+  "quantidade_minima": 2,
+  "unidade_medida": "pacote",
+  "data_validade": "2027-03-30"
+}
