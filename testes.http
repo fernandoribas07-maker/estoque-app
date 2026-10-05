@@ -19,3 +19,18 @@ Content-Type: application/json
   "unidade_medida": "pacote",
   "data_validade": "2027-03-30"
 }
+
+### 1. Cadastrar um produto de teste para ser deletado
+POST http://localhost:3000/produtos
+Content-Type: application/json
+
+{
+  "categoria_id": 3,
+  "nome": "Produto Teste para Deletar",
+  "quantidade_atual": 1,
+  "quantidade_minima": 1,
+  "unidade_medida": "un"
+}
+
+### 2. Deletar o produto recém-criado (substitua o ID se necessário)
+DELETE http://localhost:3000/produtos/6
