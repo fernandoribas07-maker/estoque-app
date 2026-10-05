@@ -1,0 +1,5 @@
+### Testar a listagem de todos os produtos
+GET http://localhost:3000/produtos
+
+### Testar a baixa de 1 unidade do Leite (ID 1)
+PUT http://localhost:3000/produtos/1/consumir
