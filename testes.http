@@ -1,36 +1,46 @@
-### Testar a listagem de todos os produtos
+### 1. Health Check (Verificar se a API está online)
+GET http://localhost:3000/
+
+### ==========================================
+### TESTES DE PRODUTOS
+### ==========================================
+
+### 2. Listar todos os produtos (com categorias)
 GET http://localhost:3000/produtos
 
-### Testar a baixa de 1 unidade do Leite (ID 1)
-PUT http://localhost:3000/produtos/1/consumir
-
-### Testar busca de produtos com estoque baixo
+### 3. Listar produtos com estoque baixo
 GET http://localhost:3000/produtos/estoque-baixo
 
-### Cadastrar um novo produto
+### 4. Buscar um produto específico pelo ID (Sucesso - ID 1)
+GET http://localhost:3000/produtos/1
+
+### 5. Testar erro 404 (Produto inexistente)
+GET http://localhost:3000/produtos/9999
+
+### 6. Cadastrar um novo produto
 POST http://localhost:3000/produtos
 Content-Type: application/json
 
 {
-  "categoria_id": 2,
-  "nome": "Feijão Carioca 1kg",
-  "quantidade_atual": 3,
-  "quantidade_minima": 2,
-  "unidade_medida": "pacote",
-  "data_validade": "2027-03-30"
+  "categoria_id": 1,
+  "nome": "Tomate Orgânico",
+  "quantidade_atual": 15,
+  "quantidade_minima": 5,
+  "unidade_medida": "kg",
+  "data_validade": "2026-10-30"
 }
 
-### 1. Cadastrar um produto de teste para ser deletado
-POST http://localhost:3000/produtos
+### ==========================================
+### TESTES DE CATEGORIAS
+### ==========================================
+
+### 7. Listar todas as categorias
+GET http://localhost:3000/categorias
+
+### 8. Cadastrar uma nova categoria
+POST http://localhost:3000/categorias
 Content-Type: application/json
 
 {
-  "categoria_id": 3,
-  "nome": "Produto Teste para Deletar",
-  "quantidade_atual": 1,
-  "quantidade_minima": 1,
-  "unidade_medida": "un"
+  "nome": "Hortifrúti"
 }
-
-### 2. Deletar o produto recém-criado (substitua o ID se necessário)
-DELETE http://localhost:3000/produtos/6

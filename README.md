@@ -62,3 +62,24 @@ O servidor estará acessível em: http://localhost:3000/produtos📝 [Para anota
   "unidade_medida": "pacote",
   "data_validade": "2027-03-30"
 }
+
+# 📦 API de Controle de Estoque
+
+API RESTful desenvolvida em **Node.js** com **Express** e banco de dados **SQLite** (`better-sqlite3`) para gerenciar produtos, categorias e controle de estoque de forma simples e eficiente.
+
+---
+
+## 🚀 Tecnologias Utilizadas
+
+- **Node.js** (Ambiente de execução JavaScript)
+- **Express** (Framework web minimalista para Node.js)
+- **SQLite / better-sqlite3** (Banco de dados relacional leve e embutido)
+- **Git & GitHub** (Controle de versão)
+
+---
+
+## ⚙️ Como Executar o Projeto
+
+1. Clone o repositório ou acesse a pasta do projeto:
+   ```bash
+   cd estoque-app

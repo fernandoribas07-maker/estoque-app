@@ -14,7 +14,7 @@ app.get('/', (req, res) => {
 });
 
 // =========================================================
-// 2. ROTAS DE LEITURA (GET)
+// 2. ROTAS DE LEITURA DE PRODUTOS (GET)
 // =========================================================
 
 // ROTA: Listar todos os produtos
@@ -34,7 +34,6 @@ app.get('/produtos', (req, res) => {
 });
 
 // ROTA: Listar produtos com estoque baixo ou zerado
-// (Nota: Deve vir antes de qualquer rota com parâmetro /produtos/:id)
 app.get('/produtos/estoque-baixo', (req, res) => {
   try {
     const produtosBaixoEstoque = db.prepare(`
@@ -51,11 +50,73 @@ app.get('/produtos/estoque-baixo', (req, res) => {
   }
 });
 
+// ROTA: Buscar um produto específico pelo ID
+app.get('/produtos/:id', (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const produto = db.prepare(`
+      SELECT p.*, c.nome as categoria_nome 
+      FROM produtos p 
+      LEFT JOIN categorias c ON p.categoria_id = c.id
+      WHERE p.id = ?
+    `).get(id);
+
+    if (!produto) {
+      return res.status(404).json({ erro: "Produto não encontrado." });
+    }
+
+    res.json(produto);
+  } catch (erro) {
+    console.error("Erro ao buscar produto por ID:", erro);
+    res.status(500).json({ erro: "Erro ao buscar produto no banco de dados." });
+  }
+});
+
 // =========================================================
-// 3. ROTA DE CRIAÇÃO (POST)
+// 3. ROTAS DE CATEGORIAS (GET e POST)
 // =========================================================
 
-// ROTA: Cadastrar um novo produto
+// ROTA: Listar todas as categorias
+app.get('/categorias', (req, res) => {
+  try {
+    const categorias = db.prepare('SELECT * FROM categorias').all();
+    res.json(categorias);
+  } catch (erro) {
+    console.error("Erro ao buscar categorias:", erro);
+    res.status(500).json({ erro: "Erro ao buscar categorias do banco de dados." });
+  }
+});
+
+// ROTA: Cadastrar uma nova categoria
+app.post('/categorias', (req, res) => {
+  try {
+    const { nome } = req.body;
+
+    if (!nome) {
+      return res.status(400).json({ 
+        erro: "O campo 'nome' é obrigatório para cadastrar uma categoria." 
+      });
+    }
+
+    const stmt = db.prepare('INSERT INTO categorias (nome) VALUES (?)');
+    const resultado = stmt.run(nome);
+
+    const novaCategoria = db.prepare('SELECT * FROM categorias WHERE id = ?').get(resultado.lastInsertRowid);
+
+    res.status(201).json({
+      mensagem: "Categoria cadastrada com sucesso!",
+      categoria: novaCategoria
+    });
+  } catch (erro) {
+    console.error("Erro ao cadastrar categoria:", erro);
+    res.status(500).json({ erro: "Erro ao cadastrar categoria no banco de dados." });
+  }
+});
+
+// =========================================================
+// 4. ROTA DE CRIAÇÃO DE PRODUTO (POST)
+// =========================================================
 app.post('/produtos', (req, res) => {
   try {
     const { 
@@ -67,7 +128,6 @@ app.post('/produtos', (req, res) => {
       data_validade 
     } = req.body;
 
-    // Validação dos campos obrigatórios
     if (!categoria_id || !nome || quantidade_atual === undefined || quantidade_minima === undefined) {
       return res.status(400).json({ 
         erro: "Os campos 'categoria_id', 'nome', 'quantidade_atual' e 'quantidade_minima' são obrigatórios." 
@@ -101,10 +161,8 @@ app.post('/produtos', (req, res) => {
 });
 
 // =========================================================
-// 4. ROTA DE ATUALIZAÇÃO (PUT)
+// 5. ROTA DE ATUALIZAÇÃO (PUT)
 // =========================================================
-
-// ROTA: Dar baixa de 1 unidade no estoque do produto
 app.put('/produtos/:id/consumir', (req, res) => {
   try {
     const { id } = req.params;
@@ -141,10 +199,8 @@ app.put('/produtos/:id/consumir', (req, res) => {
 });
 
 // =========================================================
-// 5. ROTA DE EXCLUSÃO (DELETE)
+// 6. ROTA DE EXCLUSÃO (DELETE)
 // =========================================================
-
-// ROTA: Deletar um produto pelo ID
 app.delete('/produtos/:id', (req, res) => {
   try {
     const { id } = req.params;
@@ -174,4 +230,3 @@ const PORTA = 3000;
 app.listen(PORTA, () => {
   console.log(`Servidor rodando em http://localhost:${PORTA}`);
 });
-
