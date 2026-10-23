@@ -1,46 +1,22 @@
-### 1. Health Check (Verificar se a API está online)
-GET http://localhost:3000/
-
 ### ==========================================
-### TESTES DE PRODUTOS
+### TESTES DA LISTA DE COMPRAS
 ### ==========================================
 
-### 2. Listar todos os produtos (com categorias)
-GET http://localhost:3000/produtos
+### 1. Listar itens da lista de compras
+GET http://localhost:3000/lista-compras
 
-### 3. Listar produtos com estoque baixo
-GET http://localhost:3000/produtos/estoque-baixo
-
-### 4. Buscar um produto específico pelo ID (Sucesso - ID 1)
-GET http://localhost:3000/produtos/1
-
-### 5. Testar erro 404 (Produto inexistente)
-GET http://localhost:3000/produtos/9999
-
-### 6. Cadastrar um novo produto
-POST http://localhost:3000/produtos
+### 2. Adicionar um item manual na lista de compras
+POST http://localhost:3000/lista-compras
 Content-Type: application/json
 
 {
-  "categoria_id": 1,
-  "nome": "Tomate Orgânico",
-  "quantidade_atual": 15,
-  "quantidade_minima": 5,
-  "unidade_medida": "kg",
-  "data_validade": "2026-10-30"
+  "nome_item": "Café em pó",
+  "quantidade_comprar": 2,
+  "origem": "MANUAL"
 }
 
-### ==========================================
-### TESTES DE CATEGORIAS
-### ==========================================
+### 3. Marcar item como comprado (Alterna 0/1)
+PATCH http://localhost:3000/lista-compras/1/comprar
 
-### 7. Listar todas as categorias
-GET http://localhost:3000/categorias
-
-### 8. Cadastrar uma nova categoria
-POST http://localhost:3000/categorias
-Content-Type: application/json
-
-{
-  "nome": "Hortifrúti"
-}
+### 4. Remover item da lista de compras
+DELETE http://localhost:3000/lista-compras/1 

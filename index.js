@@ -199,6 +199,106 @@ app.put('/produtos/:id/consumir', (req, res) => {
 });
 
 // =========================================================
+// 7. ROTAS DA LISTA DE COMPRAS (GET, POST, PATCH, DELETE)
+// =========================================================
+
+// ROTA: Listar todos os itens da lista de compras
+app.get('/lista-compras', (req, res) => {
+  try {
+    const itens = db.prepare('SELECT * FROM lista_compras').all();
+    res.json(itens);
+  } catch (erro) {
+    console.error("Erro ao buscar lista de compras:", erro);
+    res.status(500).json({ erro: "Erro ao buscar lista de compras no banco de dados." });
+  }
+});
+
+// ROTA: Adicionar um item à lista de compras
+app.post('/lista-compras', (req, res) => {
+  try {
+    const { produto_id, nome_item, quantidade_comprar, origem } = req.body;
+
+    if (!nome_item || quantidade_comprar === undefined) {
+      return res.status(400).json({ 
+        erro: "Os campos 'nome_item' e 'quantidade_comprar' são obrigatórios." 
+      });
+    }
+
+    const stmt = db.prepare(`
+      INSERT INTO lista_compras (produto_id, nome_item, quantidade_comprar, origem)
+      VALUES (?, ?, ?, ?)
+    `);
+
+    const resultado = stmt.run(
+      produto_id || null,
+      nome_item,
+      quantidade_comprar,
+      origem || 'MANUAL'
+    );
+
+    const novoItem = db.prepare('SELECT * FROM lista_compras WHERE id = ?').get(resultado.lastInsertRowid);
+
+    res.status(201).json({
+      mensagem: "Item adicionado à lista de compras com sucesso!",
+      item: novoItem
+    });
+  } catch (erro) {
+    console.error("Erro ao adicionar item na lista de compras:", erro);
+    res.status(500).json({ erro: "Erro ao adicionar item no banco de dados." });
+  }
+});
+
+// ROTA: Alternar status de comprado (0 vira 1, 1 vira 0)
+app.patch('/lista-compras/:id/comprar', (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const item = db.prepare('SELECT * FROM lista_compras WHERE id = ?').get(id);
+
+    if (!item) {
+      return res.status(404).json({ erro: "Item não encontrado na lista de compras." });
+    }
+
+    const novoStatus = item.comprado === 1 ? 0 : 1;
+
+    db.prepare('UPDATE lista_compras SET comprado = ? WHERE id = ?').run(novoStatus, id);
+
+    const itemAtualizado = db.prepare('SELECT * FROM lista_compras WHERE id = ?').get(id);
+
+    res.json({
+      mensagem: "Status do item atualizado com sucesso!",
+      item: itemAtualizado
+    });
+  } catch (erro) {
+    console.error("Erro ao atualizar item da lista:", erro);
+    res.status(500).json({ erro: "Erro interno ao atualizar item." });
+  }
+});
+
+// ROTA: Remover item da lista de compras
+app.delete('/lista-compras/:id', (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const item = db.prepare('SELECT * FROM lista_compras WHERE id = ?').get(id);
+
+    if (!item) {
+      return res.status(404).json({ erro: "Item não encontrado na lista de compras." });
+    }
+
+    db.prepare('DELETE FROM lista_compras WHERE id = ?').run(id);
+
+    res.json({
+      mensagem: "Item removido da lista de compras com sucesso!",
+      item_removido: item
+    });
+  } catch (erro) {
+    console.error("Erro ao remover item da lista de compras:", erro);
+    res.status(500).json({ erro: "Erro ao remover item do banco de dados." });
+  }
+});
+
+// =========================================================
 // 6. ROTA DE EXCLUSÃO (DELETE)
 // =========================================================
 app.delete('/produtos/:id', (req, res) => {

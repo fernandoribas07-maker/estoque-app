@@ -83,3 +83,24 @@ API RESTful desenvolvida em **Node.js** com **Express** e banco de dados **SQLit
 1. Clone o repositório ou acesse a pasta do projeto:
    ```bash
    cd estoque-app
+
+   # 📦 API de Controle de Estoque
+
+API RESTful desenvolvida em **Node.js** com **Express** e banco de dados **SQLite** (`better-sqlite3`) para gerenciar produtos, categorias, controle de estoque e lista de compras de forma simples e eficiente.
+
+---
+
+## 🚀 Tecnologias Utilizadas
+
+- **Node.js** (Ambiente de execução JavaScript)
+- **Express** (Framework web minimalista para Node.js)
+- **SQLite / better-sqlite3** (Banco de dados relacional leve e embutido)
+- **Git & GitHub** (Controle de versão)
+
+---
+
+## ⚙️ Como Executar o Projeto
+
+1. Acesse a pasta do projeto:
+   ```bash
+   cd estoque-app
