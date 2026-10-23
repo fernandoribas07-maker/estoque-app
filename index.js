@@ -6,12 +6,15 @@ const app = express();
 // Middleware para interpretar requisições com corpo em JSON
 app.use(express.json());
 
+// Servir arquivos estáticos da pasta public (HTML, CSS, JS)
+app.use(express.static('public'));
+
 // =========================================================
 // 1. ROTA DE RAIZ (Health Check)
 // =========================================================
-app.get('/', (req, res) => {
-  res.json({ mensagem: "API do Controle de Estoque rodando com sucesso! 🚀" });
-});
+// app.get('/', (req, res) => {
+//   res.json({ mensagem: "API do Controle de Estoque rodando com sucesso! 🚀" });
+// });
 
 // =========================================================
 // 2. ROTAS DE LEITURA DE PRODUTOS (GET)
